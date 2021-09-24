@@ -6,6 +6,8 @@ export { CreatePhoneDto } from './create-phone.dto';
 export { CreateRoleDto } from './create-role.dto';
 export { CreateUserDto } from './create-user.dto';
 export { CredentialsDto } from './credentials.dto';
+export { FilterIssueDto } from './filter-issue.dto';
+export { FilterUserDto } from './filter-user.dto';
 export { IdDto } from './id.dto';
 export { JwtPayloadDto } from './jwt-payload.dto';
 export { IssueIdDto } from './issue-id.dto';

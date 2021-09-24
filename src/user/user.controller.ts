@@ -7,9 +7,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Response } from 'express';
 import {
@@ -17,10 +20,12 @@ import {
   CreatePhoneDto,
   CreateRoleDto,
   CreateUserDto,
+  FilterUserDto,
   ResponseEmailDto,
   ResponsePhoneDto,
   ResponseUserDto,
 } from '../global/dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Users')
 @Controller('user')
@@ -33,7 +38,8 @@ export class UserController {
     description: 'OK',
     type: [ResponseUserDto],
   })
-  async getUsers(@Res() response: Response) {
+  async getUsers(@Res() response: Response, @Query() filter?: FilterUserDto,) {
+    console.log(filter);
     response.status(HttpStatus.OK).send(await this.userService.getUsers());
   }
 
@@ -47,18 +53,22 @@ export class UserController {
 
   // will be handled by register controller
   @Post()
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Created', type: ResponseUserDto })
-  async createUser(@Body() data: CreateUserDto, @Res() response: Response) {
+  async createUser(@Body() data: CreateUserDto, @Res() response: Response, @Req() req: any,) {
     response
       .status(HttpStatus.CREATED)
       .send(await this.userService.createUser(data));
   }
 
   @Patch(':UUID')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'OK', type: ResponseUserDto })
   async updateUser(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateUserDto>,
+    @Body() data: CreateUserDto,
     @Res() response: Response,
   ) {
     response
@@ -67,17 +77,21 @@ export class UserController {
   }
 
   @Delete(':UUID')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @ApiResponse({ status: 204, description: 'No Content' })
   async deleteUser(@Param('UUID') UUID: string, @Res() response: Response) {
     await this.userService.deleteUser({ UUID });
     response.status(HttpStatus.NO_CONTENT).send();
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Post(':UUID/email')
   @ApiResponse({ status: 201, description: 'Created', type: ResponseEmailDto })
   async addEmail(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateEmailDto>,
+    @Body() data: CreateEmailDto,
     @Res() response: Response,
   ) {
     response
@@ -86,10 +100,12 @@ export class UserController {
   }
 
   @Post(':UUID/phone')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Created', type: ResponsePhoneDto })
   async addPhone(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreatePhoneDto>,
+    @Body() data: CreatePhoneDto,
     @Res() response: Response,
   ) {
     response
@@ -98,10 +114,12 @@ export class UserController {
   }
 
   @Post(':UUID/role')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Created', type: ResponsePhoneDto })
   async addRole(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateRoleDto>,
+    @Body() data: CreateRoleDto,
     @Res() response: Response,
   ) {
     response

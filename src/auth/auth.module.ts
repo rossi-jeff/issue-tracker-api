@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -23,7 +23,7 @@ const expiresIn = process.env.JWT_EXPIRES || '7d';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Session, Phone, Email, Role]),
-    UserModule,
+    forwardRef(() => UserModule),
     PassportModule.register({
       defaultStrategy: 'jwt',
       property: 'user',

@@ -12,8 +12,8 @@ import {
 import { v4 } from 'uuid';
 
 const count = {
-  users: 10,
-  issues: 50,
+  users: 20,
+  issues: 80,
 };
 const userIds = [];
 const defaultPW = 'Secret!!';

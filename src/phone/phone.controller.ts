@@ -35,7 +35,7 @@ export class PhoneController {
   @ApiResponse({ status: 200, description: 'OK', type: ResponsePhoneDto })
   async updatePhone(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreatePhoneDto>,
+    @Body() data: CreatePhoneDto,
     @Res() response: Response,
     @Req() req: any,
   ) {

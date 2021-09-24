@@ -35,7 +35,7 @@ export class EmailController {
   @ApiResponse({ status: 200, description: 'OK', type: ResponseEmailDto })
   async updateEmail(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateEmailDto>,
+    @Body() data: CreateEmailDto,
     @Res() response: Response,
     @Req() req: any,
   ) {

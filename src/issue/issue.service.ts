@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import {
   CreateCommentDto,
   CreateIssueDto,
+  FilterIssueDto,
   UpdateIssueDto,
   UuidDto,
 } from '../global/dto';
@@ -22,8 +23,8 @@ export class IssueService {
     private commentService: CommentService,
   ) {}
 
-  async getIssues() {
-    return await this.issueRepo.find({ relations: this.relations });
+  async getIssues(filter?: FilterIssueDto) {
+    return await this.issueRepo.find({ where: filter, relations: this.relations });
   }
 
   async showIssue(uuidDto: UuidDto) {

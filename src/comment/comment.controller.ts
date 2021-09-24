@@ -35,7 +35,7 @@ export class CommentController {
   @ApiResponse({ status: 200, description: 'OK', type: ResponseCommentDto })
   async updateComment(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateCommentDto>,
+    @Body() data: CreateCommentDto,
     @Res() response: Response,
     @Req() req: any,
   ) {

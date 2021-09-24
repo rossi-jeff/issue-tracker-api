@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -15,6 +16,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CreateCommentDto,
   CreateIssueDto,
+  FilterIssueDto,
   ResponseCommentDto,
   ResponseIssueDto,
 } from '../global/dto';
@@ -33,8 +35,9 @@ export class IssueController {
     description: 'OK',
     type: [ResponseIssueDto],
   })
-  async getIssues(@Res() response: Response) {
-    response.status(HttpStatus.OK).send(await this.issueService.getIssues());
+  async getIssues(@Res() response: Response, @Query() filter?: FilterIssueDto) {
+    console.log(filter);
+    response.status(HttpStatus.OK).send(await this.issueService.getIssues(filter));
   }
 
   @Get(':UUID')
@@ -65,7 +68,7 @@ export class IssueController {
   @ApiResponse({ status: 200, description: 'OK', type: ResponseIssueDto })
   async updateIssue(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateIssueDto>,
+    @Body() data: CreateIssueDto,
     @Res() response: Response,
     @Req() req: any,
   ) {
@@ -97,7 +100,7 @@ export class IssueController {
   })
   async addComment(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateCommentDto>,
+    @Body() data: CreateCommentDto,
     @Res() response: Response,
     @Req() req: any,
   ) {

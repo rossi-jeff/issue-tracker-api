@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -35,9 +34,8 @@ export class RoleController {
   @ApiResponse({ status: 200, description: 'OK', type: ResponseRoleDto })
   async updateRole(
     @Param('UUID') UUID: string,
-    @Body() data: Partial<CreateRoleDto>,
+    @Body() data: CreateRoleDto,
     @Res() response: Response,
-    @Req() req: any,
   ) {
     response
       .status(HttpStatus.OK)
@@ -51,7 +49,6 @@ export class RoleController {
   async deleteRole(
     @Param('UUID') UUID: string,
     @Res() response: Response,
-    @Req() req: any,
   ) {
     await this.roleService.deleteRole({ UUID });
     response.status(HttpStatus.NO_CONTENT).send();

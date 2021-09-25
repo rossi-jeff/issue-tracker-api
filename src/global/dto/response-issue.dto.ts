@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ResponseUserDto } from '.';
+import { ResponseCommentDto, ResponseUserDto } from '.';
 import { CreateIssueDto } from './create-issue.dto';
 
 export class ResponseIssueDto extends CreateIssueDto {
@@ -26,4 +26,7 @@ export class ResponseIssueDto extends CreateIssueDto {
 
   @ApiProperty({ type: () => ResponseUserDto })
   AssignedTo?: ResponseUserDto;
+
+  @ApiProperty({ type: [ResponseCommentDto] })
+  Comments?: ResponseCommentDto[];
 }

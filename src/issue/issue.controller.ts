@@ -59,7 +59,7 @@ export class IssueController {
   ) {
     response
       .status(HttpStatus.CREATED)
-      .send(await this.issueService.createIssue(data));
+      .send(await this.issueService.createIssue(data, req.user.Id));
   }
 
   @Patch(':UUID')
@@ -106,6 +106,6 @@ export class IssueController {
   ) {
     response
       .status(HttpStatus.CREATED)
-      .send(await this.issueService.addComment(UUID, data));
+      .send(await this.issueService.addComment(UUID, data, req.user.Id));
   }
 }

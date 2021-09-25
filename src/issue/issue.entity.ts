@@ -1,5 +1,5 @@
 import { User } from '../user/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseModel } from '../global/base';
 import {
   ComplexityArray,
@@ -7,6 +7,7 @@ import {
   PriorityArray,
   StatusArray,
 } from '../global/array';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class Issue extends BaseModel {
@@ -53,4 +54,7 @@ export class Issue extends BaseModel {
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'AssignedToId' })
   AssignedTo: User;
+
+  @OneToMany((type) => Comment, (comment) => comment.Issue)
+  Comments: Comment[];
 }

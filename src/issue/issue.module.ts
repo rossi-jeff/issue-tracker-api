@@ -8,10 +8,11 @@ import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/comment.entity';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
+import { Project } from '../project/project.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Issue, Comment]),
+    TypeOrmModule.forFeature([User, Issue, Comment, Project]),
     UserModule,
     AuthModule,
   ],

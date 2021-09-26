@@ -36,8 +36,9 @@ export class IssueController {
     type: [ResponseIssueDto],
   })
   async getIssues(@Res() response: Response, @Query() filter?: FilterIssueDto) {
-    console.log(filter);
-    response.status(HttpStatus.OK).send(await this.issueService.getIssues(filter));
+    response
+      .status(HttpStatus.OK)
+      .send(await this.issueService.getIssues(filter));
   }
 
   @Get(':UUID')

@@ -38,7 +38,7 @@ export class UserController {
     description: 'OK',
     type: [ResponseUserDto],
   })
-  async getUsers(@Res() response: Response, @Query() filter?: FilterUserDto,) {
+  async getUsers(@Res() response: Response, @Query() filter?: FilterUserDto) {
     console.log(filter);
     response.status(HttpStatus.OK).send(await this.userService.getUsers());
   }
@@ -56,7 +56,11 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Created', type: ResponseUserDto })
-  async createUser(@Body() data: CreateUserDto, @Res() response: Response, @Req() req: any,) {
+  async createUser(
+    @Body() data: CreateUserDto,
+    @Res() response: Response,
+    @Req() req: any,
+  ) {
     response
       .status(HttpStatus.CREATED)
       .send(await this.userService.createUser(data));

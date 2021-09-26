@@ -46,10 +46,7 @@ export class RoleController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiResponse({ status: 204, description: 'No Content' })
-  async deleteRole(
-    @Param('UUID') UUID: string,
-    @Res() response: Response,
-  ) {
+  async deleteRole(@Param('UUID') UUID: string, @Res() response: Response) {
     await this.roleService.deleteRole({ UUID });
     response.status(HttpStatus.NO_CONTENT).send();
   }

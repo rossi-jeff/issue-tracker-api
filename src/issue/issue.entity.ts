@@ -8,6 +8,7 @@ import {
   StatusArray,
 } from '../global/array';
 import { Comment } from '../comment/comment.entity';
+import { Project } from '../project/project.entity';
 
 @Entity()
 export class Issue extends BaseModel {
@@ -47,6 +48,9 @@ export class Issue extends BaseModel {
   @Column({ type: 'bigint', nullable: true })
   AssignedToId: number;
 
+  @Column({ type: 'bigint', nullable: true })
+  ProjectId: number;
+
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'AuthorId' })
   Author: User;
@@ -54,6 +58,10 @@ export class Issue extends BaseModel {
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'AssignedToId' })
   AssignedTo: User;
+
+  @ManyToOne((type) => Project)
+  @JoinColumn({ name: 'ProjectId' })
+  Project: Project;
 
   @OneToMany((type) => Comment, (comment) => comment.Issue)
   Comments: Comment[];

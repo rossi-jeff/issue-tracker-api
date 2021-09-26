@@ -16,7 +16,13 @@ import { CommentService } from '../comment/comment.service';
 @Injectable()
 export class IssueService {
   private entity: any = Issue;
-  private relations: string[] = ['Author', 'AssignedTo', 'Comments', 'Comments.Author'];
+  private relations: string[] = [
+    'Author',
+    'AssignedTo',
+    'Comments',
+    'Project',
+    'Comments.Author',
+  ];
 
   constructor(
     @InjectRepository(Issue) private issueRepo: Repository<Issue>,
@@ -24,7 +30,10 @@ export class IssueService {
   ) {}
 
   async getIssues(filter?: FilterIssueDto) {
-    return await this.issueRepo.find({ where: filter, relations: this.relations });
+    return await this.issueRepo.find({
+      where: filter,
+      relations: this.relations,
+    });
   }
 
   async showIssue(uuidDto: UuidDto) {
@@ -40,7 +49,7 @@ export class IssueService {
   async createIssue(createDto: CreateIssueDto, AuthorId: number) {
     const issue = new Issue();
     _.merge(issue, createDto);
-    issue.AuthorId = AuthorId
+    issue.AuthorId = AuthorId;
     await this.issueRepo.save(issue);
     return issue;
   }
@@ -60,10 +69,14 @@ export class IssueService {
     return issue.Id == null;
   }
 
-  async addComment(UUID: string, createDto: CreateCommentDto, AuthorId: number) {
+  async addComment(
+    UUID: string,
+    createDto: CreateCommentDto,
+    AuthorId: number,
+  ) {
     const issue = await this.showIssue({ UUID });
     createDto.IssueId = issue.Id;
-    createDto.AuthorId = AuthorId
+    createDto.AuthorId = AuthorId;
     return await this.commentService.createComment(createDto);
   }
 }

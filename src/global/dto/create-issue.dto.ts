@@ -30,4 +30,7 @@ export class CreateIssueDto {
 
   @ApiProperty()
   AssignedToId?: number;
+
+  @ApiProperty()
+  ProjectId?: number;
 }

@@ -10,15 +10,18 @@ import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { RegisterService } from './register.service';
 import { RegisterController } from './register.controller';
+import { TimeclockService } from '../timeclock/timeclock.service';
+import { Timeclock } from '../timeclock/timeclock.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Phone, Email, Role])],
+  imports: [TypeOrmModule.forFeature([User, Phone, Email, Role, Timeclock])],
   providers: [
     RegisterService,
     UserService,
     EmailService,
     PhoneService,
     RoleService,
+    TimeclockService,
   ],
   controllers: [RegisterController],
 })

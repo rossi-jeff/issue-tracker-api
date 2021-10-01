@@ -16,13 +16,15 @@ import { UserService } from '../user/user.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { TimeclockService } from '../timeclock/timeclock.service';
+import { Timeclock } from '../timeclock/timeclock.entity';
 
 const secret = process.env.JWT_SECRET || 'Su93r53cre7!';
 const expiresIn = process.env.JWT_EXPIRES || '7d';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Session, Phone, Email, Role]),
+    TypeOrmModule.forFeature([User, Session, Phone, Email, Role, Timeclock]),
     forwardRef(() => UserModule),
     PassportModule.register({
       defaultStrategy: 'jwt',
@@ -45,6 +47,7 @@ const expiresIn = process.env.JWT_EXPIRES || '7d';
     EmailService,
     PhoneService,
     RoleService,
+    TimeclockService,
   ],
   exports: [PassportModule, JwtModule],
 })

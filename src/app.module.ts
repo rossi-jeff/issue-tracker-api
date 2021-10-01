@@ -10,6 +10,7 @@ import { CommentModule } from './comment/comment.module';
 import { RegisterModule } from './register/register.module';
 import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
+import { TimeclockModule } from './timeclock/timeclock.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ProjectModule } from './project/project.module';
     RegisterModule,
     AuthModule,
     ProjectModule,
+    TimeclockModule,
   ],
 })
 export class AppModule {}

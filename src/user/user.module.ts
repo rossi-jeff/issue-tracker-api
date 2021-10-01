@@ -10,13 +10,21 @@ import { EmailService } from '../email/email.service';
 import { PhoneService } from '../phone/phone.service';
 import { RoleService } from '../role/role.service';
 import { AuthModule } from '../auth/auth.module';
+import { TimeclockService } from '../timeclock/timeclock.service';
+import { Timeclock } from '../timeclock/timeclock.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Phone, Email, Role]),
+    TypeOrmModule.forFeature([User, Phone, Email, Role, Timeclock]),
     forwardRef(() => AuthModule),
   ],
-  providers: [UserService, EmailService, PhoneService, RoleService],
+  providers: [
+    UserService,
+    EmailService,
+    PhoneService,
+    RoleService,
+    TimeclockService,
+  ],
   controllers: [UserController],
 })
 export class UserModule {}

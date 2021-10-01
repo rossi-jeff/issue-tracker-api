@@ -42,6 +42,9 @@ export class Issue extends BaseModel {
   })
   Complexity: string;
 
+  @Column()
+  SequenceNumber?: string;
+
   @Column({ type: 'bigint', nullable: true })
   AuthorId: number;
 

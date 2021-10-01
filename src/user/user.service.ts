@@ -17,6 +17,7 @@ import * as _ from 'lodash';
 import { EmailService } from '../email/email.service';
 import { PhoneService } from '../phone/phone.service';
 import { RoleService } from '../role/role.service';
+import { TimeclockService } from '../timeclock/timeclock.service';
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,7 @@ export class UserService {
     private emailService: EmailService,
     private phoneService: PhoneService,
     private roleService: RoleService,
+    private timeclockService: TimeclockService,
   ) {}
 
   async getUsers() {
@@ -130,6 +132,7 @@ export class UserService {
 
   async changePassword(UUID: string, changeDto: ChangePasswordDto) {
     const user = await this.getUserByUUID(UUID);
+
     const { OldPassword, Password, Confirm } = changeDto;
     if (Password != Confirm) {
       return false;
@@ -140,5 +143,10 @@ export class UserService {
     } else {
       return false;
     }
+  }
+
+  async getTimeClocks(UUID: string) {
+    const user = await this.showUserUuid({ UUID });
+    return await this.timeclockService.getTimeclocksSorted(user.Id);
   }
 }

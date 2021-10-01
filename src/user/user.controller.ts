@@ -24,6 +24,8 @@ import {
   ResponseEmailDto,
   ResponsePhoneDto,
   ResponseUserDto,
+  ChangePasswordDto,
+  ResponseTimeclockDto,
 } from '../global/dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -129,5 +131,31 @@ export class UserController {
     response
       .status(HttpStatus.CREATED)
       .send(await this.userService.addRole(UUID, data));
+  }
+
+  @Post(':UUID/password')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 204, description: 'No Content' })
+  @ApiResponse({ status: 401, description: 'Unathorized' })
+  async changePassword(
+    @Param('UUID') UUID: string,
+    @Body() changeDto: ChangePasswordDto,
+    @Res() response: Response,
+  ) {
+    const user = await this.userService.changePassword(UUID, changeDto);
+    if (user) {
+      response.status(HttpStatus.NO_CONTENT).send();
+    } else {
+      response.status(HttpStatus.UNAUTHORIZED).send();
+    }
+  }
+
+  @Get(':UUID/timeclock')
+  @ApiResponse({ status: 200, description: 'OK', type: [ResponseTimeclockDto] })
+  async getTimeClocks(@Param('UUID') UUID: string, @Res() response: Response) {
+    response
+      .status(HttpStatus.OK)
+      .send(await this.userService.getTimeClocks(UUID));
   }
 }

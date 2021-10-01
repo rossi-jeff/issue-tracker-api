@@ -26,6 +26,9 @@ export class CreateIssueDto {
   Complexity?: string;
 
   @ApiProperty()
+  SequenceNumber?: string;
+
+  @ApiProperty()
   AuthorId?: number;
 
   @ApiProperty()

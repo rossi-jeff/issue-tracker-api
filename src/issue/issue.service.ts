@@ -12,6 +12,7 @@ import { NotFoundUUID } from '../global/error';
 import { Issue } from './issue.entity';
 import * as _ from 'lodash';
 import { CommentService } from '../comment/comment.service';
+import { Project } from '../project/project.entity';
 
 @Injectable()
 export class IssueService {
@@ -26,6 +27,7 @@ export class IssueService {
 
   constructor(
     @InjectRepository(Issue) private issueRepo: Repository<Issue>,
+    @InjectRepository(Project) private projectRepo: Repository<Project>,
     private commentService: CommentService,
   ) {}
 
@@ -50,6 +52,13 @@ export class IssueService {
     const issue = new Issue();
     _.merge(issue, createDto);
     issue.AuthorId = AuthorId;
+    if (createDto.ProjectId) {
+      const project = await this.projectRepo.findOne({
+        where: { Id: createDto.ProjectId },
+      });
+      issue.SequenceNumber = project.nextSequenceNumber();
+      await this.projectRepo.save(project);
+    }
     await this.issueRepo.save(issue);
     return issue;
   }
@@ -57,7 +66,15 @@ export class IssueService {
   async updateIssue(updateDto: UpdateIssueDto) {
     const { UUID, ...updates } = updateDto;
     const issue = await this.showIssue({ UUID });
+    let ProjectId = issue.ProjectId;
     if (!_.isEmpty(updates)) _.merge(issue, updates);
+    if (ProjectId != updateDto.ProjectId) {
+      const project = await this.projectRepo.findOne({
+        where: { Id: updateDto.ProjectId },
+      });
+      issue.SequenceNumber = project.nextSequenceNumber();
+      await this.projectRepo.save(project);
+    }
     await this.issueRepo.save(issue);
     return issue;
   }

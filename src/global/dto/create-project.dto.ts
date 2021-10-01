@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { SequenceEmbedDto } from './sequence-embed.dto';
 
 export class CreateProjectDto {
   @ApiProperty()
@@ -6,4 +7,7 @@ export class CreateProjectDto {
 
   @ApiProperty()
   Details: string;
+
+  @ApiProperty()
+  Sequence: SequenceEmbedDto;
 }

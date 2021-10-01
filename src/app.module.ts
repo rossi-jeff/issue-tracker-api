@@ -11,6 +11,7 @@ import { RegisterModule } from './register/register.module';
 import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { TimeclockModule } from './timeclock/timeclock.module';
+import { ResourceModule } from './resource/resource.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TimeclockModule } from './timeclock/timeclock.module';
     AuthModule,
     ProjectModule,
     TimeclockModule,
+    ResourceModule,
   ],
 })
 export class AppModule {}

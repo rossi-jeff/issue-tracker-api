@@ -18,7 +18,6 @@ import { Response } from 'express';
 import {
   CreateEmailDto,
   CreatePhoneDto,
-  CreateRoleDto,
   CreateUserDto,
   FilterUserDto,
   ResponseEmailDto,
@@ -117,20 +116,6 @@ export class UserController {
     response
       .status(HttpStatus.CREATED)
       .send(await this.userService.addPhone(UUID, data));
-  }
-
-  @Post(':UUID/role')
-  @UseGuards(AuthGuard())
-  @ApiBearerAuth()
-  @ApiResponse({ status: 201, description: 'Created', type: ResponsePhoneDto })
-  async addRole(
-    @Param('UUID') UUID: string,
-    @Body() data: CreateRoleDto,
-    @Res() response: Response,
-  ) {
-    response
-      .status(HttpStatus.CREATED)
-      .send(await this.userService.addRole(UUID, data));
   }
 
   @Post(':UUID/password')

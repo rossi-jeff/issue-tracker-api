@@ -16,19 +16,17 @@ import { NotFound, NotFoundUUID } from '../global/error';
 import * as _ from 'lodash';
 import { EmailService } from '../email/email.service';
 import { PhoneService } from '../phone/phone.service';
-import { RoleService } from '../role/role.service';
 import { TimeclockService } from '../timeclock/timeclock.service';
 
 @Injectable()
 export class UserService {
   private entity: any = User;
-  private relations: string[] = ['Phones', 'Emails', 'Roles'];
+  private relations: string[] = ['Phones', 'Emails'];
 
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
     private emailService: EmailService,
     private phoneService: PhoneService,
-    private roleService: RoleService,
     private timeclockService: TimeclockService,
   ) {}
 
@@ -70,6 +68,7 @@ export class UserService {
 
   async createUser(createDto: CreateUserDto) {
     const user = new User();
+    if (!user.Roles) user.Roles = [];
     _.merge(user, createDto);
     await this.userRepo.save(user);
     return user;
@@ -80,7 +79,6 @@ export class UserService {
     const user = await this.showUserUuid({ UUID });
     if (!_.isEmpty(updates)) _.merge(user, updates);
     await this.userRepo.save(user);
-    console.log('updateUser', user);
     return user;
   }
 
@@ -88,7 +86,6 @@ export class UserService {
     const user = await this.showUserUuid(uuidDto);
     await this.emailService.deleteByUserId({ UserId: user.Id });
     await this.phoneService.deleteByUserId({ UserId: user.Id });
-    await this.roleService.deleteByUserId({ UserId: user.Id });
     await this.userRepo.remove(user);
     return user.Id == null;
   }
@@ -105,17 +102,10 @@ export class UserService {
     return await this.phoneService.createPhone(createDto);
   }
 
-  async addRole(UUID: string, createDto: CreateRoleDto) {
-    const user = await this.showUserUuid({ UUID });
-    createDto.UserId = user.Id;
-    return await this.roleService.createRole(createDto);
-  }
-
   async getUserByUsername(Username: string) {
     // for login, password not returned unless asked for
     return this.userRepo
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.Roles', 'role')
       .where('user.Credentials.Username = :Username', { Username })
       .addSelect('user.Credentials.Password')
       .getOne();
@@ -125,7 +115,6 @@ export class UserService {
     // for password change, get missing password
     return this.userRepo
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.Roles', 'role')
       .where('user.UUID = :UUID', { UUID })
       .addSelect('user.Credentials.Password')
       .getOne();

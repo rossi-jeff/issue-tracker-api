@@ -5,3 +5,10 @@ export enum RoleEnum {
   Sales,
   EndUser,
 }
+
+export type RoleType =
+  | 'Developer'
+  | 'Support'
+  | 'Manager'
+  | 'Sales'
+  | 'EndUser';

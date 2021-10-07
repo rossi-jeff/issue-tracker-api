@@ -6,8 +6,6 @@ import { Email } from '../email/email.entity';
 import { EmailService } from '../email/email.service';
 import { Phone } from '../phone/phone.entity';
 import { PhoneService } from '../phone/phone.service';
-import { Role } from '../role/role.entity';
-import { RoleService } from '../role/role.service';
 import { Session } from '../session/session.entity';
 import { SessionService } from '../session/session.service';
 import { User } from '../user/user.entity';
@@ -24,7 +22,7 @@ const expiresIn = process.env.JWT_EXPIRES || '7d';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Session, Phone, Email, Role, Timeclock]),
+    TypeOrmModule.forFeature([User, Session, Phone, Email, Timeclock]),
     forwardRef(() => UserModule),
     PassportModule.register({
       defaultStrategy: 'jwt',
@@ -46,7 +44,6 @@ const expiresIn = process.env.JWT_EXPIRES || '7d';
     UserService,
     EmailService,
     PhoneService,
-    RoleService,
     TimeclockService,
   ],
   exports: [PassportModule, JwtModule],

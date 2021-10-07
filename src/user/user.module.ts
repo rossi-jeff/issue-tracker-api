@@ -5,26 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Phone } from '../phone/phone.entity';
 import { Email } from '../email/email.entity';
-import { Role } from '../role/role.entity';
 import { EmailService } from '../email/email.service';
 import { PhoneService } from '../phone/phone.service';
-import { RoleService } from '../role/role.service';
 import { AuthModule } from '../auth/auth.module';
 import { TimeclockService } from '../timeclock/timeclock.service';
 import { Timeclock } from '../timeclock/timeclock.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Phone, Email, Role, Timeclock]),
+    TypeOrmModule.forFeature([User, Phone, Email, Timeclock]),
     forwardRef(() => AuthModule),
   ],
-  providers: [
-    UserService,
-    EmailService,
-    PhoneService,
-    RoleService,
-    TimeclockService,
-  ],
+  providers: [UserService, EmailService, PhoneService, TimeclockService],
   controllers: [UserController],
 })
 export class UserModule {}

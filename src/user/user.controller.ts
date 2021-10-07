@@ -79,7 +79,7 @@ export class UserController {
   ) {
     response
       .status(HttpStatus.OK)
-      .send(this.userService.updateUser({ UUID, ...data }));
+      .send(await this.userService.updateUser({ UUID, ...data }));
   }
 
   @Delete(':UUID')

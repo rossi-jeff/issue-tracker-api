@@ -25,6 +25,9 @@ export class Project extends BaseModel {
 
   @BeforeInsert()
   buildSequencePrefix() {
+    if (!this.Sequence) {
+      this.Sequence = { Prefix: '', Max: 0 };
+    }
     if (!this.Sequence.Prefix) {
       this.Sequence.Prefix = this.Name.split(' ')
         .map((word) => word[0])

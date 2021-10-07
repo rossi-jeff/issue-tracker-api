@@ -80,6 +80,7 @@ export class UserService {
     const user = await this.showUserUuid({ UUID });
     if (!_.isEmpty(updates)) _.merge(user, updates);
     await this.userRepo.save(user);
+    console.log('updateUser', user);
     return user;
   }
 

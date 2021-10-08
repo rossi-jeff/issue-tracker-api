@@ -21,7 +21,6 @@ export class TimeclockService {
   ) {}
 
   async getTimeclocks(filter?: FilterTimeclockDto) {
-    console.log('getTimeclocks', filter);
     const { UserId, ProjectId, IssueId, StartDate, EndDate } = filter;
     let builder = this.timeclockRepo.createQueryBuilder('timeclock');
     builder.leftJoinAndSelect('timeclock.User', 'user');

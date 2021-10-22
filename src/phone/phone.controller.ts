@@ -41,7 +41,7 @@ export class PhoneController {
   ) {
     response
       .status(HttpStatus.OK)
-      .send(this.phoneService.updatePhone({ UUID, ...data }));
+      .send(await this.phoneService.updatePhone({ UUID, ...data }));
   }
 
   @Delete(':UUID')

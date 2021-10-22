@@ -41,7 +41,7 @@ export class EmailController {
   ) {
     response
       .status(HttpStatus.OK)
-      .send(this.emailService.updateEmail({ UUID, ...data }));
+      .send(await this.emailService.updateEmail({ UUID, ...data }));
   }
 
   @Delete(':UUID')

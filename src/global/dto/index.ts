@@ -9,6 +9,7 @@ export { CreateRoleDto } from './create-role.dto';
 export { CreateTimeclockDto } from './create-timeclock.dto';
 export { CreateUserDto } from './create-user.dto';
 export { CredentialsDto } from './credentials.dto';
+export { DeletedCountDto } from './deleted-count.dto';
 export { FilterIssueDto } from './filter-issue.dto';
 export { FilterTimeclockDto } from './filter-timeclock.dto';
 export { FilterUserDto } from './filter-user.dto';

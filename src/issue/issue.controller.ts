@@ -19,6 +19,7 @@ import {
   FilterIssueDto,
   ResponseCommentDto,
   ResponseIssueDto,
+  DeletedCountDto,
 } from '../global/dto';
 import { IssueService } from './issue.service';
 import { Response } from 'express';
@@ -41,14 +42,6 @@ export class IssueController {
       .send(await this.issueService.getIssues(filter));
   }
 
-  @Get(':UUID')
-  @ApiResponse({ status: 200, description: 'OK', type: ResponseIssueDto })
-  async showIssue(@Param('UUID') UUID: string, @Res() response: Response) {
-    response
-      .status(HttpStatus.OK)
-      .send(await this.issueService.showIssue({ UUID }));
-  }
-
   @Post()
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -61,6 +54,29 @@ export class IssueController {
     response
       .status(HttpStatus.CREATED)
       .send(await this.issueService.createIssue(data, req.user.Id));
+  }
+
+  @Get('deleted')
+  @ApiResponse({ status: 200, description: 'OK', type: DeletedCountDto })
+  async countDeleted(@Res() response: Response) {
+    let count = await this.issueService.countDeleted();
+    response.status(HttpStatus.OK).send({ count });
+  }
+
+  @Post('reset')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'OK', type: [ResponseIssueDto] })
+  async resetDeleted(@Res() response: Response) {
+    response.status(HttpStatus.OK).send(await this.issueService.resetDeleted());
+  }
+
+  @Get(':UUID')
+  @ApiResponse({ status: 200, description: 'OK', type: ResponseIssueDto })
+  async showIssue(@Param('UUID') UUID: string, @Res() response: Response) {
+    response
+      .status(HttpStatus.OK)
+      .send(await this.issueService.showIssue({ UUID }));
   }
 
   @Patch(':UUID')

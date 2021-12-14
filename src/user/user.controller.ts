@@ -25,6 +25,7 @@ import {
   ResponseUserDto,
   ChangePasswordDto,
   ResponseTimeclockDto,
+  DeletedCountDto,
 } from '../global/dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -42,6 +43,21 @@ export class UserController {
   async getUsers(@Res() response: Response, @Query() filter?: FilterUserDto) {
     console.log(filter);
     response.status(HttpStatus.OK).send(await this.userService.getUsers());
+  }
+
+  @Get('deleted')
+  @ApiResponse({ status: 200, description: 'OK', type: DeletedCountDto })
+  async countDeleted(@Res() response: Response) {
+    let count = await this.userService.countDeleted();
+    response.status(HttpStatus.OK).send({ count });
+  }
+
+  @Post('reset')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'OK', type: [ResponseUserDto] })
+  async resetDeleted(@Res() response: Response) {
+    response.status(HttpStatus.OK).send(await this.userService.resetDeleted());
   }
 
   @Get(':UUID')

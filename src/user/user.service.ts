@@ -84,10 +84,11 @@ export class UserService {
 
   async deleteUser(uuidDto: UuidDto) {
     const user = await this.showUserUuid(uuidDto);
-    await this.emailService.deleteByUserId({ UserId: user.Id });
-    await this.phoneService.deleteByUserId({ UserId: user.Id });
-    await this.userRepo.remove(user);
-    return user.Id == null;
+    user.IsDeleted = true;
+    // await this.emailService.deleteByUserId({ UserId: user.Id });
+    ///await this.phoneService.deleteByUserId({ UserId: user.Id });
+    await this.userRepo.save(user);
+    return true;
   }
 
   async addEmail(UUID: string, createDto: CreateEmailDto) {
@@ -138,5 +139,14 @@ export class UserService {
   async getTimeClocks(UUID: string) {
     const user = await this.showUserUuid({ UUID });
     return await this.timeclockService.getTimeclocksSorted(user.Id);
+  }
+
+  async countDeleted() {
+    return this.userRepo.count({ where: { IsDeleted: true } });
+  }
+
+  async resetDeleted() {
+    await this.userRepo.update({ IsDeleted: true }, { IsDeleted: false });
+    return await this.getUsers();
   }
 }

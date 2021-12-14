@@ -15,6 +15,7 @@ import { CreateProjectDto } from '../global/dto/create-project.dto';
 import { UpdateProjectDto } from '../global/dto/update-project.dto';
 import { Response } from 'express';
 import { ResponseProjectDto } from '../global/dto/response-project.dto';
+import { DeletedCountDto } from '../global/dto/deleted-count.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -44,6 +45,23 @@ export class ProjectController {
     response
       .status(HttpStatus.CREATED)
       .send(await this.projectService.create(createProjectDto));
+  }
+
+  @Get('deleted')
+  @ApiResponse({ status: 200, description: 'OK', type: DeletedCountDto })
+  async countDeleted(@Res() response: Response) {
+    let count = await this.projectService.countDeleted();
+    response.status(HttpStatus.OK).send({ count });
+  }
+
+  @Post('reset')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'OK', type: [ResponseProjectDto] })
+  async resetDeleted(@Res() response: Response) {
+    response
+      .status(HttpStatus.OK)
+      .send(await this.projectService.resetDeleted());
   }
 
   @Get(':UUID')

@@ -85,7 +85,17 @@ export class TimeclockService {
 
   async deleteTimeclock(uuidDto: UuidDto) {
     const clock = await this.showTimeclock(uuidDto);
-    await this.timeclockRepo.remove(clock);
-    return clock.Id == null;
+    clock.IsDeleted = true;
+    await this.timeclockRepo.save(clock);
+    return true;
+  }
+
+  async countDeleted() {
+    return this.timeclockRepo.count({ where: { IsDeleted: true } });
+  }
+
+  async resetDeleted() {
+    await this.timeclockRepo.update({ IsDeleted: true }, { IsDeleted: false });
+    return await this.getTimeclocks({});
   }
 }

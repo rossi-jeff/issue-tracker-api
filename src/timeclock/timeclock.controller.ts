@@ -17,6 +17,7 @@ import {
   CreateTimeclockDto,
   FilterTimeclockDto,
   ResponseTimeclockDto,
+  DeletedCountDto,
 } from '../global/dto';
 import { TimeclockService } from './timeclock.service';
 import { Response } from 'express';
@@ -36,6 +37,23 @@ export class TimeclockController {
     response
       .status(HttpStatus.OK)
       .send(await this.timeclockService.getTimeclocks(filter));
+  }
+
+  @Get('deleted')
+  @ApiResponse({ status: 200, description: 'OK', type: DeletedCountDto })
+  async countDeleted(@Res() response: Response) {
+    let count = await this.timeclockService.countDeleted();
+    response.status(HttpStatus.OK).send({ count });
+  }
+
+  @Post('reset')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'OK', type: [ResponseTimeclockDto] })
+  async resetDeleted(@Res() response: Response) {
+    response
+      .status(HttpStatus.OK)
+      .send(await this.timeclockService.resetDeleted());
   }
 
   @Get(':UUID')

@@ -28,12 +28,15 @@ export class ProjectService {
   }
 
   async findAll() {
-    return await this.projectRepo.find({ relations: this.relations });
+    return await this.projectRepo.find({
+      where: { IsDeleted: false },
+      relations: this.relations,
+    });
   }
 
   async findOne(UUID: string) {
     const found = await this.projectRepo.findOne({
-      where: { UUID },
+      where: { IsDeleted: false, UUID },
       relations: this.relations,
     });
     if (!found) throw NotFoundUUID(this.entity, UUID);
@@ -49,7 +52,17 @@ export class ProjectService {
 
   async remove(UUID: string) {
     const project = await this.findOne(UUID);
-    await this.projectRepo.remove(project);
-    return project.Id == null;
+    project.IsDeleted = true;
+    await this.projectRepo.save(project);
+    return true;
+  }
+
+  async countDeleted() {
+    return this.projectRepo.count({ where: { IsDeleted: true } });
+  }
+
+  async resetDeleted() {
+    await this.projectRepo.update({ IsDeleted: true }, { IsDeleted: false });
+    return await this.findAll();
   }
 }

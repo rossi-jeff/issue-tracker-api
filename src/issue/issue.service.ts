@@ -81,9 +81,11 @@ export class IssueService {
 
   async deleteIssue(uuidDto: UuidDto) {
     const issue = await this.showIssue(uuidDto);
-    await this.commentService.deleteByIssueId({ IssueId: issue.Id });
-    await this.issueRepo.remove(issue);
-    return issue.Id == null;
+    issue.IsDeleted = true;
+    // the comments will be hidden when issue is soft deleted
+    // await this.commentService.deleteByIssueId({ IssueId: issue.Id });
+    await this.issueRepo.save(issue);
+    return true;
   }
 
   async addComment(
@@ -95,5 +97,14 @@ export class IssueService {
     createDto.IssueId = issue.Id;
     createDto.AuthorId = AuthorId;
     return await this.commentService.createComment(createDto);
+  }
+
+  async countDeleted() {
+    return this.issueRepo.count({ where: { IsDeleted: true } });
+  }
+
+  async resetDeleted() {
+    await this.issueRepo.update({ IsDeleted: true }, { IsDeleted: false });
+    return await this.getIssues({});
   }
 }

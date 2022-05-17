@@ -1,4 +1,6 @@
 import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
+import { RoleEnum } from '../global/enum';
+import { EnumToArray } from '../global/util';
 
 /*
 CREATE TABLE `user` (
@@ -92,6 +94,11 @@ export class createUserTable1632246101368 implements MigrationInterface {
             type: 'varchar',
             length: '50',
             isNullable: true,
+          },
+          {
+            name: 'Roles',
+            type: 'set',
+            enum: EnumToArray(RoleEnum),
           },
         ],
         engine: 'InnoDB',

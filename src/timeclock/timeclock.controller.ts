@@ -56,6 +56,15 @@ export class TimeclockController {
       .send(await this.timeclockService.resetDeleted());
   }
 
+  @Post('current')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiResponse({ status: 204, description: 'No Content' })
+  async currentDates(@Res() response: Response) {
+    await this.timeclockService.currentDates();
+    response.status(HttpStatus.NO_CONTENT).send();
+  }
+
   @Get(':UUID')
   @ApiResponse({ status: 200, description: 'OK', type: ResponseTimeclockDto })
   async showTimeclock(@Param('UUID') UUID: string, @Res() response: Response) {

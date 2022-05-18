@@ -10,6 +10,7 @@ import {
 } from '../global/dto';
 import { NotFoundUUID } from '../global/error';
 import * as _ from 'lodash';
+import { formatDate, formatTime } from '../global/util';
 
 @Injectable()
 export class TimeclockService {
@@ -22,7 +23,7 @@ export class TimeclockService {
 
   async getTimeclocks(filter?: FilterTimeclockDto) {
     const { UserId, ProjectId, IssueId, StartDate, EndDate } = filter;
-    let builder = this.timeclockRepo.createQueryBuilder('timeclock');
+    const builder = this.timeclockRepo.createQueryBuilder('timeclock');
     builder.leftJoinAndSelect('timeclock.User', 'user');
     builder.leftJoinAndSelect('timeclock.Issue', 'issue');
     builder.leftJoinAndSelect('timeclock.Project', 'project');
@@ -97,5 +98,36 @@ export class TimeclockService {
   async resetDeleted() {
     await this.timeclockRepo.update({ IsDeleted: true }, { IsDeleted: false });
     return await this.getTimeclocks({});
+  }
+
+  async currentDates() {
+    const now = new Date().getTime();
+    const last = await this.timeclockRepo
+      .createQueryBuilder('timeclock')
+      .orderBy('timeclock.Start.Date', 'DESC')
+      .addOrderBy('timeclock.Start.Time', 'DESC')
+      .getOne();
+    if (!last) return;
+    const ts = new Date(`${last.Start.Date} ${last.Start.Time}`).getTime();
+    const offset = now > ts ? now - ts : ts - now;
+    const timeclocks = await this.timeclockRepo.find();
+    let sTS: number, eTS: number, sDate: Date, eDate: Date;
+    for (const clock of timeclocks) {
+      sTS =
+        new Date(`${clock.Start.Date} ${clock.Start.Time}`).getTime() + offset;
+      eTS = new Date(`${clock.End.Date} ${clock.End.Time}`).getTime() + offset;
+      sDate = new Date(sTS);
+      eDate = new Date(eTS);
+      clock.Start = {
+        Date: formatDate(sDate),
+        Time: formatTime(sDate),
+      };
+      clock.End = {
+        Date: formatDate(eDate),
+        Time: formatTime(eDate),
+      };
+      await this.timeclockRepo.save(clock);
+    }
+    return true;
   }
 }

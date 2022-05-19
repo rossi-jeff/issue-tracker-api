@@ -8,7 +8,7 @@ import {
   StatusArray,
 } from '../global/array';
 import { sample } from '../global/util';
-const maxPerProject = 10;
+const maxPerProject = 20;
 let issue: any,
   issueCount: number,
   rand: number,

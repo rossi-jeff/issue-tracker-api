@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Project } from '../project/project.entity';
 import * as faker from 'faker';
-const projectCount = 20;
+const projectCount = 30;
 let project: any;
 
 export class seedProjects1652807644771 implements MigrationInterface {

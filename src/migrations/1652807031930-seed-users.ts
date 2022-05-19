@@ -6,7 +6,7 @@ import { PhoneTypeEnum, RoleEnum, UsageEnum } from '../global/enum';
 import { v4 } from 'uuid';
 
 const count = {
-  users: 20,
+  users: 30,
 };
 const userIds = [];
 const defaultPW = 'S3cr3t!!';

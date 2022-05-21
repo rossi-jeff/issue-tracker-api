@@ -2,11 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/jeffross/issue-tracker-api.jeff-rossi.com
-    - /bin/npm i
-    - /bin/npm run build
-    - /bin/cp ormconfig.js $DEPLOYPATH
-    - /bin/cp package.json $DEPLOYPATH
     - /bin/cp .htaccess $DEPLOYPATH
-    - /bin/cp -r dist $DEPLOYPATH
-    - /bin/rm -rf node_modules
-    - /bin/rm -rf dist/*
+    - /bin/cp -r * $DEPLOYPATH

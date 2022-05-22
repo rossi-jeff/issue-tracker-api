@@ -38,6 +38,8 @@ lerna-debug.log*
 ormconfig.json
 ormconfig.*.json
 !ormconfig.example.json
+ormconfig.env
+ormconfig.*.env
 
 /setup
 .env

@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/jeffross/issue-tracker-api.jeff-rossi.com
+    - export DEPLOYPATH=/home/jeffross/applications/issue-tracker-api.jeff-rossi.com
     - /bin/cp .htaccess $DEPLOYPATH
     - /bin/cp -r * $DEPLOYPATH

@@ -68,12 +68,14 @@ export class IssueService {
     const issue = await this.showIssue({ UUID });
     let ProjectId = issue.ProjectId;
     if (!_.isEmpty(updates)) _.merge(issue, updates);
-    if (ProjectId != updateDto.ProjectId) {
+    if (updateDto.ProjectId && ProjectId != updateDto.ProjectId) {
       const project = await this.projectRepo.findOne({
         where: { Id: updateDto.ProjectId },
       });
-      issue.SequenceNumber = project.nextSequenceNumber();
-      await this.projectRepo.save(project);
+      if (project) {
+        issue.SequenceNumber = project.nextSequenceNumber();
+        await this.projectRepo.save(project);
+      }
     }
     await this.issueRepo.save(issue);
     return issue;

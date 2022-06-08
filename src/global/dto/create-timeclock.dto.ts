@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ClockDto } from "./clock.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { ClockDto } from './clock.dto';
 
 export class CreateTimeclockDto {
   @ApiProperty()

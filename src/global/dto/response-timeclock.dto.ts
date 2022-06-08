@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ResponseIssueDto, ResponseUserDto } from ".";
-import { CreateTimeclockDto } from "./create-timeclock.dto";
-import { ResponseProjectDto } from "./response-project.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { ResponseIssueDto, ResponseUserDto } from '.';
+import { CreateTimeclockDto } from './create-timeclock.dto';
+import { ResponseProjectDto } from './response-project.dto';
 
 export class ResponseTimeclockDto extends CreateTimeclockDto {
   @ApiProperty()
